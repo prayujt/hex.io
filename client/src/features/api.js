@@ -1,5 +1,3 @@
-const io = require("socket.io-client");
-
 
 //Http routes for lobby
 export const fetchUsers = async () => {
@@ -24,9 +22,6 @@ export const postUserReady = (newPlayer) => {
          
 }
 
-
-//Sockets for game
-export const socket = io("ws://" + process.env.REACT_APP_API_URL + "/socket.io");
 
 
 

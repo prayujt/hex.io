@@ -1,19 +1,29 @@
-import { useEffect } from "react";
-import { socket } from "../../features/api";
+import { useEffect, useState } from "react";
+const io = require('socket.io-client')
 
 export default function Game() {
+    const [socket, setSocket] = useState(null);
+    const [socketConnected, setSocketConnected] = useState(false);
+   
+    // establish socket connection
     useEffect(() => {
-        console.log("Yoot")
-        socket.on('connect', () => {
-            console.log("ping")
-        });
-        socket.on('gameUpdate', (data) => { 
-            console.log(data)
-        })  
-
-        return () => {
-            socket.off('connect');
-            socket.off('gameUpdate');
-        };
-    });
+      setSocket(io('http://' + process.env.REACT_APP_API_URL));
+    }, []);
+   
+    // subscribe to the socket event
+    useEffect(() => {
+      if (!socket) return;
+   
+      socket.on('connect', () => {
+        setSocketConnected(socket.connected);
+        console.log("Connected")
+      });
+      socket.on('disconnect', () => {
+        setSocketConnected(socket.connected);
+      });
+      socket.on('barUpdate', (data) => {
+        console.log(data)
+      });
+   
+    }, [socket]);
 }

@@ -3,6 +3,7 @@ import Lobby from './components/Lobby/Lobby';
 import socket from './features/api'
 import { useEffect } from 'react';
 import Login from './components/Lobby/Login';
+import Game from './components/Game/Game';
 
 const App = () => {
 
@@ -11,6 +12,7 @@ const App = () => {
     <>
       <Lobby />
       {/* <Login/> */}
+      <Game />
     </>
   );
 }
