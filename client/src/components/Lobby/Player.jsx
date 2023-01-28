@@ -1,5 +1,10 @@
+import "./Player.css"
+
 export default function Player({ name, uuid }) {
     return (
-        <h4>{name}: {uuid}</h4>
+        <div className="player-container">
+            <div className="player"></div>
+            <h4>{name}: {uuid}</h4>
+        </div>
     );
 }

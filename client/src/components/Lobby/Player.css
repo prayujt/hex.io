@@ -6,7 +6,7 @@
     border-radius: 100%;    
 }
 
-#player-container {
+.player-container {
     position: relative;
     display: flex;
     flex-direction: row;
