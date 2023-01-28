@@ -13,6 +13,14 @@ const MAX_SCALE int = 20
 const NUM_HEXAGONS int = 100
 
 func initializeGame() {
+
+	go func() {
+		for {
+			gameUpdate()
+			time.Sleep(time.Millisecond * 1000)
+		}
+	}()
+
 	rand.Seed(time.Now().UnixNano())
 	for i := 0; i < NUM_HEXAGONS; i++ {
 		production_value := ProductionValues[rand.Intn(len(ProductionValues)-1)]
