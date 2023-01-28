@@ -39,7 +39,7 @@ func main() {
 		defer cancelCtx()
 		for {
 			gameUpdate(ctx)
-			time.Sleep(time.Millisecond * 25)
+			time.Sleep(time.Millisecond * 1000)
 		}
 	}()
 
