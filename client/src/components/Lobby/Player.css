@@ -1,0 +1,16 @@
+.player {
+    position:relative;
+    background-color: #6DDCFF;
+    width: 25px;
+    height: 25px;
+    border-radius: 100%;    
+}
+
+.player-container {
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+}
+
