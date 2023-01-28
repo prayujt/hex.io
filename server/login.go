@@ -37,14 +37,18 @@ func updateName(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		panic(err)
 	}
-	names[player.Uuid] = player.Username
+	if player.Username == "" {
+		fmt.Fprintf(w, "empty name")
+	} else {
+		names[player.Uuid] = player.Username
 
-	if len(readyStatus) == 0 {
-		readyStatus = make(map[string]bool)
+		if len(readyStatus) == 0 {
+			readyStatus = make(map[string]bool)
+		}
+		readyStatus[player.Uuid] = false
+
+		fmt.Fprintf(w, "updated name")
 	}
-	readyStatus[player.Uuid] = false
-
-	fmt.Fprintf(w, "updated name")
 }
 
 func playerReady(w http.ResponseWriter, r *http.Request) {
