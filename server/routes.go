@@ -1,9 +1,10 @@
 package main
 
 import (
-	"fmt"
+	"context"
 	"log"
 	"net/http"
+	"time"
 
 	socketio "github.com/googollee/go-socket.io"
 	"github.com/googollee/go-socket.io/engineio"
@@ -15,11 +16,6 @@ import (
 
 var allowOriginFunc = func(r *http.Request) bool {
 	return true
-}
-
-func helloWorld(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "application/json")
-	fmt.Fprintf(w, "Hello World")
 }
 
 func main() {
@@ -37,15 +33,14 @@ func main() {
 	})
 
 	go func() {
-		// ctx := context.WithValue(context.Background(), "dots", dots)
-		// ctx = context.WithValue(ctx, "server", server)
-		// ctx, cancelCtx := context.WithCancel(ctx)
+		ctx := context.WithValue(context.Background(), "server", server)
+		ctx, cancelCtx := context.WithCancel(ctx)
 
-		// defer cancelCtx()
-		// for {
-		// 	update(ctx)
-		// 	time.Sleep(time.Millisecond * 25)
-		// }
+		defer cancelCtx()
+		for {
+			gameUpdate(ctx)
+			time.Sleep(time.Millisecond * 25)
+		}
 	}()
 
 	server.OnConnect("/", func(s socketio.Conn) error {
