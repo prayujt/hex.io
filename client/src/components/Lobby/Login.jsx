@@ -3,8 +3,9 @@ import {v4 as uuidv4} from 'uuid'
 import { postUser } from "../../features/api"
 
 export default function Login() {
-    const [name, setName] = useState([])
+    const [name, setName] = useState("")
     
+
     let uuid = uuidv4()
 
     //add input for this
