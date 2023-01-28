@@ -56,6 +56,7 @@ func main() {
 	http.HandleFunc("/names", getNames)
 	http.HandleFunc("/updateName", updateName)
 	http.HandleFunc("/playerReady", playerReady)
+	http.HandleFunc("/readyStatus", getReadyStatus)
 
 	log.Println("Serving at localhost:8000...")
 	log.Fatal(http.ListenAndServe(":8000", nil))
