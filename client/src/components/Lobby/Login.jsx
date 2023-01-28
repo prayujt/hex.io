@@ -10,7 +10,8 @@ export default function Login() {
     //add input for this
     let newPlayer = {
         uuid: uuid,
-        username: "Michael"
+        username: "Michael",
+        ready: false
     }
 
 
