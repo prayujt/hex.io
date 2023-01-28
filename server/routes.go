@@ -9,7 +9,6 @@ import (
 	"github.com/googollee/go-socket.io/engineio/transport"
 	"github.com/googollee/go-socket.io/engineio/transport/polling"
 	"github.com/googollee/go-socket.io/engineio/transport/websocket"
-	"github.com/rs/cors"
 	// "github.com/mitchellh/mapstructure"
 )
 
@@ -21,10 +20,6 @@ var server *socketio.Server
 
 func main() {
 	log.SetFlags(log.LstdFlags | log.Lmicroseconds)
-	c := cors.New(cors.Options{
-		AllowedOrigins:   []string{"*"},
-		AllowCredentials: true,
-	})
 	server = socketio.NewServer(&engineio.Options{
 		Transports: []transport.Transport{
 			&polling.Transport{
@@ -56,7 +51,7 @@ func main() {
 	}()
 	defer server.Close()
 
-	http.Handle("/socket.io/", c.Handler(server))
+	http.Handle("/socket.io/", server)
 
 	http.HandleFunc("/names", getNames)
 	http.HandleFunc("/updateName", updateName)
