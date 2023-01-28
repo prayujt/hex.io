@@ -18,7 +18,6 @@ const App = () => {
   const [gameStatus, setGameStatus] = useState([])
 
 
-
   // establish socket connection
   useEffect(() => {
     setSocket(io('http://' + process.env.REACT_APP_API_URL));
