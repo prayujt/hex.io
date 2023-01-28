@@ -4,13 +4,13 @@ import './Lobby.css'
 import { useEffect, useState } from 'react';
 import { fetchUsers } from '../../features/api';
 
-export default function Lobby() {
-    const [players, setPlayers] = useState([])
+export default function Lobby({ uuid }) {
+    const [players, setPlayers] = useState(["Kaniel", "Prayuj", "Jason"])
+    const [isReady, setisReady] = useState(false)
 
     const getUsers = async () => {
         const users = await fetchUsers()
         users === null ? setPlayers([]) : setPlayers(users)
-
     }
 
     useEffect(()=> {
@@ -19,14 +19,6 @@ export default function Lobby() {
         }, 1000);
         return () => clearTimeout(timer);
     })
-
-    const handleReadyClick = () => {
-        
-    }
-
-
-
-   
 
     return (
         <>
