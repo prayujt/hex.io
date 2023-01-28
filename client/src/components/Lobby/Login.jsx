@@ -1,27 +1,27 @@
 import { useState, useEffect } from "react"
-import {v4 as uuidv4} from 'uuid'
 import { postUser } from "../../features/api"
 
-export default function Login() {
-    const [name, setName] = useState("")
-    
+export default function Login({ uuid }) {
+    const [username, setUsername] = useState([])
 
-    let uuid = uuidv4()
+    const handleSubmit = () =>
+    {
+        let newPlayer = {
+            uuid: uuid,
+            username: username
+        };
+        console.log(newPlayer);
+        postUser(newPlayer);
+    };
 
-    //add input for this
-    let newPlayer = {
-        uuid: uuid,
-        username: "Michael",
-        ready: false
-    }
 
-
+    //onSubmit stuff
     return (
-        <>
-            <h1>Enter User name</h1>
-            <input type="text" />
-            <button onClick={() => postUser(newPlayer)}>Ok</button>
-            <div>{uuid}</div>
-        </>
+        <div>
+            <label> Username:
+                <input type="text" onChange = {(e)=>setUsername(e.target.value)} name = "name" />
+            </label>
+            <button onClick={handleSubmit}>Ok</button>
+         </div>
     )
 }
