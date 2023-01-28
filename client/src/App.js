@@ -1,7 +1,11 @@
 import React from 'react';
-import Lobby from './Components/Lobby/Lobby';
+import Lobby from './components/Lobby/Lobby';
+import socket from './features/api'
+import { useEffect } from 'react';
 
-function App() {
+const App = () => {
+
+
   return (
     <>
       <Lobby />
