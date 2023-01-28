@@ -1,5 +1,5 @@
 import ReadyButton from './ReadyButton'
-import Players from './Players'
+import Player from './Player'
 import './Lobby.css'
 import { useEffect, useState } from 'react';
 import { fetchUsers } from '../../features/api';
@@ -29,9 +29,9 @@ export default function Lobby() {
 
                 <h2>Players:</h2>
                 {players.map((player) => (
-                    <Players name={player} />
+                    <Player name={player} />
                 ))}
-                <ReadyButton id='button' />
+                <ReadyButton />
 
             </div>
         </>
