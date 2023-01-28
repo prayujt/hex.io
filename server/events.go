@@ -33,6 +33,8 @@ func initializeGame() {
 		})
 	}
 
+	server.BroadcastToNamespace("", "gameStarted", GameState)
+
 	go func() {
 		time.Sleep(time.Second * 3)
 		for {
