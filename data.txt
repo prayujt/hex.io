@@ -17,8 +17,8 @@ server:
 				owner: username string,
 				count: int,
 				production: int,
-				max_capacity: int,
-				attack_count: None | int
+				maxCapacity: int,
+				attackCount: None | int
 			},
 			...
 		]

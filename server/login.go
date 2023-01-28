@@ -69,5 +69,6 @@ func playerReady(w http.ResponseWriter, r *http.Request) {
 
 	if startGame {
 		log.Println("All players are ready!")
+		initializeGame()
 	}
 }
