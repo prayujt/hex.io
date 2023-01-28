@@ -16,6 +16,7 @@ type Player struct {
 }
 
 func getNames(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Access-Control-Allow-Origin", "*")
 	var usernames []string
 
 	for _, username := range names {
@@ -26,6 +27,7 @@ func getNames(w http.ResponseWriter, r *http.Request) {
 }
 
 func updateName(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Access-Control-Allow-Origin", "*")
 	if len(names) == 0 {
 		names = make(map[string]string)
 	}
@@ -46,6 +48,7 @@ func updateName(w http.ResponseWriter, r *http.Request) {
 }
 
 func playerReady(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Access-Control-Allow-Origin", "*")
 	var player Player
 	err := json.NewDecoder(r.Body).Decode(&player)
 	if err != nil {

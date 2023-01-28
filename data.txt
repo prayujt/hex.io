@@ -1,0 +1,47 @@
+Start (HTTP Server):
+GET /names:
+	[name1, name2, ...]
+
+POST /updateName(uuid, username)
+POST /playerReady(uuid)
+
+--------------------------------------------------------------------------------------------------------------------------------------
+
+Game (socket.io):
+server:
+	emit gameUpdate:
+		[
+			{
+				id: int,
+				tileState: "contested" | "neutral" | "owned",
+				owner: username string,
+				count: int,
+				production: int,
+				max_capacity: int,
+				attack_count: None | int
+			},
+			...
+		]
+
+	emit barUpdate:
+		{
+			username: int,
+			username2: int,
+			username3: int
+		}
+
+	emit movements:
+		[
+			{
+				from: index int,
+				to: index2 int
+			}
+		]
+	
+
+client:
+	emit move:
+		{
+			from: index int,
+			to: index2 int
+		}
