@@ -15,11 +15,17 @@ const NUM_HEXAGONS int = 100
 func initializeGame() {
 	rand.Seed(time.Now().UnixNano())
 	for i := 0; i < NUM_HEXAGONS; i++ {
+		owner := "None"
+		if i%2 == 0 {
+			owner = "Prayuj"
+		} else if i%3 == 0 {
+			owner = "Kaniel"
+		}
 		production_value := ProductionValues[rand.Intn(len(ProductionValues)-1)]
 		GameState = append(GameState, Hexagon{
 			HexId:       i,
 			TileState:   "neutral",
-			Owner:       "None",
+			Owner:       owner,
 			Count:       0,
 			Production:  production_value,
 			MaxCapacity: production_value * (rand.Intn(MAX_SCALE-MIN_SCALE) + MIN_SCALE),
@@ -31,6 +37,14 @@ func initializeGame() {
 		time.Sleep(time.Second * 3)
 		for {
 			gameUpdate()
+			time.Sleep(time.Millisecond * 1000)
+		}
+	}()
+
+	go func() {
+		time.Sleep(time.Second * 3)
+		for {
+			barUpdate()
 			time.Sleep(time.Millisecond * 1000)
 		}
 	}()
