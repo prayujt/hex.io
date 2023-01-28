@@ -2,36 +2,49 @@ import ReadyButton from './ReadyButton'
 import Player from './Player'
 import './Lobby.css'
 import { useEffect, useState } from 'react';
-import { fetchUsers } from '../../features/api';
+import { fetchUsers, postUserReady } from '../../features/api';
+import Game from '../Game/Game';
 
-export default function Lobby({ uuid }) {
+export default function Lobby({ uuid, gameStatus }) {
     const [players, setPlayers] = useState(["Kaniel", "Prayuj", "Jason"])
-    const [isReady, setisReady] = useState(false)
+    const [isPlayerReady, setisPlayerReady] = useState(false)
 
     const getUsers = async () => {
         const users = await fetchUsers()
-        users === null ? setPlayers([]) : setPlayers(users)
+        users === null ? setPlayers([]) : setPlayers(users.sort())
     }
 
-    useEffect(()=> {
+    useEffect(() => {
         const timer = setTimeout(() => {
             getUsers()
-        }, 1000);
+        }, 250);
         return () => clearTimeout(timer);
     })
+
+    const handleButtonOnClick = (e) => {
+        e.preventDefault();
+        const playerStatus = {
+            uuid: uuid,
+        }
+        postUserReady(playerStatus)
+        setisPlayerReady(true)
+    }
+
 
     return (
         <>
             <div className='lobby-container'>
                 <h1>Welcome to Hex.io!</h1>
+                <h2>{uuid}</h2>
 
                 <h2>Players:</h2>
                 {players.map((player) => (
                     <Player name={player} />
                 ))}
-                <ReadyButton />
+                <ReadyButton handleClick={handleButtonOnClick} isReady={isPlayerReady} />
 
             </div>
         </>
     );
+
 }

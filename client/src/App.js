@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react';
 import Login from './components/Lobby/Login';
 import Game from './components/Game/Game';
 import { postUser } from "./features/api"
-import { uuid } from './features/generateUUID';
+import { generateUUID } from './features/generateUUID';
 
 const io = require('socket.io-client')
 
@@ -13,7 +13,11 @@ const App = () => {
   const [socket, setSocket] = useState(null);
   const [socketConnected, setSocketConnected] = useState(false);
   const [username, setUsername] = useState([])
+  const [uuid, setUUID] = useState(generateUUID)
   const [isSubmitted, setSubmitStatus] = useState(false)
+  const [gameStatus, setGameStatus] = useState([])
+
+
 
   // establish socket connection
   useEffect(() => {
@@ -31,9 +35,14 @@ const App = () => {
     socket.on('disconnect', () => {
       setSocketConnected(socket.connected);
     });
-    socket.on('gameUpdate', (data) => {
-      console.log(data)
+    socket.on('gameUpdate', (dataGame) => {
+      setGameStatus(dataGame)
+      console.log(dataGame)
     });
+
+    socket.on("gameStarted", (GameState) => {
+      console.log(GameState)
+    })
 
   }, [socket]);
 
@@ -47,13 +56,12 @@ const App = () => {
       uuid: uuid,
       username: username
     };
-    console.log(newPlayer);
+    // console.log(newPlayer);
     postUser(newPlayer);
     setSubmitStatus(true);
   };
   return isSubmitted ? <Lobby uuid={uuid} 
-                              username={username} 
-                              isSubmitted={isSubmitted} /> 
+                              gameStatus={gameStatus} /> 
                      : <Login uuid={uuid} 
                               handleOnChange={handleLoginFormChange} 
                               handleSubmit={handleLoginSubmit} />

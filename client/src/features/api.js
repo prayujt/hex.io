@@ -15,7 +15,7 @@ export const postUser = (newPlayer) => {
 }
 
 export const postUserReady = (playerReadyStatus) => {
-    fetch('http://' + process.env.REACT_APP_API_URL + '/updateName', {
+    fetch('http://' + process.env.REACT_APP_API_URL + '/playerReady', {
         method: "POST",
         body: JSON.stringify(playerReadyStatus)
     })
