@@ -15,7 +15,7 @@ const App = () => {
   const [username, setUsername] = useState([])
   const [uuid, setUUID] = useState(generateUUID)
   const [isSubmitted, setSubmitStatus] = useState(false)
-  const [gameStatus, setGameStatus] = useState([])
+  const [gameStarted, setGameStarted] = useState(false)
 
 
   // establish socket connection
@@ -34,13 +34,9 @@ const App = () => {
     socket.on('disconnect', () => {
       setSocketConnected(socket.connected);
     });
-    socket.on('gameUpdate', (dataGame) => {
-      setGameStatus(dataGame)
-      console.log(dataGame)
-    });
 
     socket.on("gameStarted", (GameState) => {
-      console.log(GameState)
+      setGameStarted(true);
     })
 
   }, [socket]);
@@ -55,16 +51,12 @@ const App = () => {
       uuid: uuid,
       username: username
     };
-    // console.log(newPlayer);
     postUser(newPlayer);
     setSubmitStatus(true);
   };
-  return isSubmitted ? <Lobby uuid={uuid} 
-                              gameStatus={gameStatus} /> 
-                     : <Login uuid={uuid} 
-                              handleOnChange={handleLoginFormChange} 
-                              handleSubmit={handleLoginSubmit} />
 
+  if (isSubmitted) return gameStarted ? <Game/> : <Lobby uuid={uuid} />
+  else return <Login uuid={uuid} handleOnChange={handleLoginFormChange} handleSubmit={handleLoginSubmit} />
 }
 
 export default App;

@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react';
 import { fetchUsers, postUserReady } from '../../features/api';
 import Game from '../Game/Game';
 
-export default function Lobby({ uuid, gameStatus }) {
+export default function Lobby({ uuid }) {
     const [players, setPlayers] = useState(["Kaniel", "Prayuj", "Jason"])
     const [isPlayerReady, setisPlayerReady] = useState(false)
 

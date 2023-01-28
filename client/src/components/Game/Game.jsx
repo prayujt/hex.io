@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { HexGrid, Layout, Hexagon, Text, Pattern, Path, Hex } from 'react-hexgrid';
+import "./Game.css"
 const io = require('socket.io-client')
 
 const Game = () => {
