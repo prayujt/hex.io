@@ -10,7 +10,7 @@ var ProductionValues = []int{1, 2, 3, 5, 10, 15, 20, 25}
 const MIN_SCALE int = 5
 const MAX_SCALE int = 20
 
-const NUM_HEXAGONS int = 100
+const NUM_HEXAGONS int = 91
 
 func initializeGame() {
 	rand.Seed(time.Now().UnixNano())
