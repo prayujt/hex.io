@@ -9,7 +9,8 @@ export default function Lobby() {
 
     const getUsers = async () => {
         const users = await fetchUsers()
-        setPlayers(users)
+        users === null ? setPlayers([]) : setPlayers(users)
+
     }
 
     useEffect(()=> {
@@ -18,6 +19,11 @@ export default function Lobby() {
         }, 1000);
         return () => clearTimeout(timer);
     })
+
+    const handleReadyClick = () => {
+        
+    }
+
 
 
    

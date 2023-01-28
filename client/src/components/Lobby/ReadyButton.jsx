@@ -1,8 +1,7 @@
 import './ReadyButton.css'
 
-export default function ReadyButton() {
+export default function ReadyButton({ handleClick }) {
     return (
-        
-        <button id='ready-button'>Ready</button>
+        <button onClick={handleClick} id='ready-button'>Ready</button>
     );
 }

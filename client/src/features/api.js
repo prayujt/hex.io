@@ -14,10 +14,10 @@ export const postUser = (newPlayer) => {
          
 }
 
-export const postUserReady = (newPlayer) => {
+export const postUserReady = (playerReadyStatus) => {
     fetch('http://' + process.env.REACT_APP_API_URL + '/updateName', {
         method: "POST",
-        body: JSON.stringify(newPlayer)
+        body: JSON.stringify(playerReadyStatus)
     })
          
 }
