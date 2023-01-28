@@ -1,10 +1,8 @@
 package main
 
 import (
-	"context"
 	"log"
 	"net/http"
-	"time"
 
 	socketio "github.com/googollee/go-socket.io"
 	"github.com/googollee/go-socket.io/engineio"
@@ -18,10 +16,12 @@ var allowOriginFunc = func(r *http.Request) bool {
 	return true
 }
 
+var server *socketio.Server
+
 func main() {
 	log.SetFlags(log.LstdFlags | log.Lmicroseconds)
 
-	server := socketio.NewServer(&engineio.Options{
+	server = socketio.NewServer(&engineio.Options{
 		Transports: []transport.Transport{
 			&polling.Transport{
 				CheckOrigin: allowOriginFunc,
@@ -31,17 +31,6 @@ func main() {
 			},
 		},
 	})
-
-	go func() {
-		ctx := context.WithValue(context.Background(), "server", server)
-		ctx, cancelCtx := context.WithCancel(ctx)
-
-		defer cancelCtx()
-		for {
-			gameUpdate(ctx)
-			time.Sleep(time.Millisecond * 1000)
-		}
-	}()
 
 	server.OnConnect("/", func(s socketio.Conn) error {
 		log.Println("connected:", s.ID())
