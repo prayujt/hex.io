@@ -74,11 +74,10 @@ func trackMovements() {
 			delete(Moves, uuid_)
 			log.Printf("Finished movement for %f", movement.Count)
 
-			// check if movement or battle
 			if movement.Sender == GameState[movement.To].Owner {
 				GameState[movement.To].Count += movement.Count
+
 			} else {
-				// if there is already a battle at the tile, reinforce either side
 				existing := false
 				for uuid_, battle := range Battles {
 					if battle.Tile == movement.To {

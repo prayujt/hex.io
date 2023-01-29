@@ -61,8 +61,8 @@ const Board = ({ socket, username, initialData }) => {
                     ];
 
                 let time =
-                    Math.abs(clicked.q - source.state.hex.q) * 2 +
-                    Math.abs(clicked.r - source.state.hex.r) * 2;
+                    Math.abs(clicked.q - source.state.hex.q) +
+                    Math.abs(clicked.r - source.state.hex.r);
 
                 // setPath(
                 //     <Path
