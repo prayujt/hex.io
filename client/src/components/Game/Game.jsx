@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import Board from "./Board";
+// import Names from "./Names";
+
 import { Skeleton } from "@mui/material";
 import "./Game.css";
 const io = require("socket.io-client");
@@ -25,11 +27,14 @@ const Game = ({ username, gameState }) => {
 
     if (socketConnected) {
         return (
-            <Board
-                socket={socket}
-                username={username}
-                initialData={gameState}
-            />
+            <div>
+                <Board
+                    socket={socket}
+                    username={username}
+                    initialData={gameState}
+                />
+                {/* <Names /> */}
+            </div>
         );
     } else
         return (

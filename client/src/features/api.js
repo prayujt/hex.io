@@ -1,7 +1,6 @@
 //Http routes for lobby
 export const fetchUsers = async () => {
     let res = await fetch("http://" + process.env.REACT_APP_API_URL + "/names");
-
     return await res.json();
 };
 
@@ -24,4 +23,11 @@ export const postMove = (movement) => {
         method: "POST",
         body: JSON.stringify(movement),
     });
+};
+
+export const fetchColors = async () => {
+    let res = await fetch(
+        "http://" + process.env.REACT_APP_API_URL + "/colors"
+    );
+    return await res.json();
 };

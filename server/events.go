@@ -13,7 +13,7 @@ import (
 var ProductionValues = []int{1, 2, 3, 5, 10, 15, 20, 25}
 var PlayerColors map[string]string
 
-var colors = []string{"blue", "green", "red", "yellow"}
+var colors = []string{"blue", "green", "purple", "yellow", "brown"}
 
 const MIN_SCALE int = 5
 const MAX_SCALE int = 20
@@ -21,6 +21,11 @@ const MAX_SCALE int = 20
 const NUM_HEXAGONS int = 91
 
 var Moves map[uuid.UUID]HexMove
+
+type PlayerColor struct {
+	Username string
+	Color    string
+}
 
 type HexMove struct {
 	Uuid     uuid.UUID
@@ -145,4 +150,16 @@ func getMovements(w http.ResponseWriter, r *http.Request) {
 func getBattles(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Access-Control-Allow-Origin", "*")
 	json.NewEncoder(w).Encode(Battles)
+}
+
+func getColors(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+
+	var tempColors []PlayerColor
+	for username, color := range PlayerColors {
+		if username != "Neutral" {
+			tempColors = append(tempColors, PlayerColor{Username: username, Color: color})
+		}
+	}
+	json.NewEncoder(w).Encode(tempColors)
 }

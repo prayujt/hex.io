@@ -51,10 +51,18 @@ svg path {
     fill: #ff0000;
 }
 
+.purple {
+    fill: #cc28da;
+}
+
 .yellow {
     fill: #ffff00;
 }
 
 .white {
     fill: #faf9f6;
+}
+
+.brown {
+    fill: #ae5f12;
 }
