@@ -75,7 +75,6 @@ func playerReady(w http.ResponseWriter, r *http.Request) {
 		log.Println("All players are ready!")
 		initializeGame()
 	}
-	log.Println("finished game initialization")
 }
 
 func getReadyStatus(w http.ResponseWriter, r *http.Request) {

@@ -1,6 +1,6 @@
 #not-ready {
-    background-color: #2FA5E7;
-    color: #FFFFFF;
+    background-color: #2fa5e7;
+    color: #ffffff;
     font-size: 24px;
     width: 302px;
     height: 62px;
@@ -13,8 +13,8 @@
 }
 
 #ready-button {
-    background-color: #2FA5E7;
-    color: #FFFFFF;
+    background-color: #2fa5e7;
+    color: #ffffff;
     font-size: 24px;
     width: 302px;
     height: 62px;
@@ -22,5 +22,3 @@
     border-style: none;
     opacity: 50%;
 }
-
-

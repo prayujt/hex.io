@@ -61,6 +61,8 @@ func main() {
 	http.HandleFunc("/move", move)
 	http.HandleFunc("/movements", getMovements)
 
+	http.HandleFunc("/battles", getBattles)
+
 	log.Println("Serving at localhost:8000...")
 	log.Fatal(http.ListenAndServe(":8000", nil))
 }

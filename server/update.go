@@ -1,8 +1,8 @@
 package main
 
 import (
+	"github.com/google/uuid"
 	"log"
-	// "math"
 )
 
 type Hexagon struct {
@@ -12,7 +12,7 @@ type Hexagon struct {
 	Count       float64
 	Production  float64
 	MaxCapacity float64
-	AttackCount int
+	AttackCount float64
 	Color       string
 }
 
@@ -21,11 +21,19 @@ type Balance struct {
 	Percentage float64
 }
 
+type Battle struct {
+	Tile        int
+	HomeCount   float64
+	AttackCount float64
+	Attacker    string
+}
+
 var GameState []Hexagon
+var Battles = make(map[uuid.UUID]Battle)
 
 func gameUpdate() {
 	for idx, hex := range GameState {
-		if hex.Count < hex.MaxCapacity {
+		if hex.Count < hex.MaxCapacity && hex.TileState != "contested" {
 			hex.Count += float64(hex.Production) / float64(UpdatesPerSecond)
 		}
 		GameState[idx] = hex
@@ -59,19 +67,83 @@ func barUpdate() {
 }
 
 func trackMovements() {
-	for idx, movement := range Moves {
+	for uuid_, movement := range Moves {
 		timeRemaining := movement.Time
 		movement.Time -= 1
 		if timeRemaining == 0 {
-			if len(Moves) == 1 {
-				var Temp []HexMove
-				Moves = Temp
-			} else {
-				Moves = append(Moves[:idx], Moves[idx+1:]...)
-			}
+			delete(Moves, uuid_)
 			log.Printf("Finished movement for %f", movement.Count)
+
+			// check if movement or battle
+			if movement.Sender == GameState[movement.To].Owner {
+				GameState[movement.To].Count += movement.Count
+			} else {
+				// if there is already a battle at the tile, reinforce either side
+				existing := false
+				for uuid_, battle := range Battles {
+					if battle.Tile == movement.To {
+						existing = true
+						if battle.Attacker == movement.Sender {
+							battle.AttackCount += movement.Count
+						} else {
+							battle.HomeCount += movement.Count
+						}
+
+						Battles[uuid_] = battle
+					}
+				}
+
+				if !existing {
+					battle := Battle{
+						Tile:        movement.To,
+						HomeCount:   GameState[movement.To].Count,
+						AttackCount: movement.Count,
+						Attacker:    movement.Sender,
+					}
+					GameState[movement.To].AttackCount = movement.Count
+					GameState[movement.To].TileState = "contested"
+					GameState[movement.To].Color = "red"
+
+					Battles[uuid.New()] = battle
+				}
+			}
 		} else {
-			Moves[idx] = movement
+			Moves[uuid_] = movement
 		}
 	}
+
+	server.BroadcastToNamespace("", "movementUpdate", Moves)
+}
+
+func trackBattles() {
+	for uuid_, battle := range Battles {
+		battle.AttackCount -= 1
+		battle.HomeCount -= 1
+		GameState[battle.Tile].AttackCount = battle.AttackCount
+		GameState[battle.Tile].Count = battle.HomeCount
+
+		if battle.AttackCount <= 0 {
+			log.Printf("Battle %s completed, home won!", uuid_)
+			GameState[battle.Tile].TileState = "owned"
+			GameState[battle.Tile].Color = PlayerColors[GameState[battle.Tile].Owner]
+			GameState[battle.Tile].AttackCount = 0
+			delete(Battles, uuid_)
+
+		} else if battle.HomeCount <= 0 {
+			log.Printf("Battle %s completed, attacker won!", uuid_)
+
+			GameState[battle.Tile].Count = battle.AttackCount
+			GameState[battle.Tile].TileState = "owned"
+			GameState[battle.Tile].Owner = battle.Attacker
+			GameState[battle.Tile].AttackCount = 0
+
+			GameState[battle.Tile].Color = PlayerColors[battle.Attacker]
+			delete(Battles, uuid_)
+
+		} else {
+			Battles[uuid_] = battle
+		}
+	}
+
+	server.BroadcastToNamespace("", "battleUpdate", Battles)
 }

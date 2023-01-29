@@ -1,16 +1,17 @@
 package main
 
 import (
-	// "log" "encoding/json"
 	"encoding/json"
 	"math"
 	"math/rand"
 	"net/http"
 	"time"
+
+	"github.com/google/uuid"
 )
 
 var ProductionValues = []int{1, 2, 3, 5, 10, 15, 20, 25}
-var Colors map[string]string
+var PlayerColors map[string]string
 
 var colors = []string{"blue", "green", "red", "yellow"}
 
@@ -19,13 +20,16 @@ const MAX_SCALE int = 20
 
 const NUM_HEXAGONS int = 91
 
-var Moves []HexMove
+var Moves map[uuid.UUID]HexMove
 
 type HexMove struct {
-	From  int
-	To    int
-	Count float64
-	Time  int
+	Uuid     uuid.UUID
+	Username string
+	From     int
+	To       int
+	Count    float64
+	Time     int
+	Sender   string
 }
 
 var UpdatesPerSecond float64 = 0.0
@@ -33,7 +37,7 @@ var Frequency float64
 
 func initializeGame() {
 	rand.Seed(time.Now().UnixNano())
-	PlayerColors := make(map[string]string)
+	PlayerColors = make(map[string]string)
 
 	num_players := len(names)
 	increment := int(math.Ceil(float64(NUM_HEXAGONS) / float64(num_players)))
@@ -98,6 +102,14 @@ func initializeGame() {
 			time.Sleep(time.Second)
 		}
 	}()
+
+	go func() {
+		time.Sleep(time.Second * 2)
+		for {
+			trackBattles()
+			time.Sleep(time.Millisecond * 100)
+		}
+	}()
 }
 
 func move(w http.ResponseWriter, r *http.Request) {
@@ -111,15 +123,26 @@ func move(w http.ResponseWriter, r *http.Request) {
 	fromHex := GameState[movement.From]
 	sendAmount := fromHex.Count
 
-	newHex := fromHex
-	newHex.Count = 0
-	GameState[movement.From] = newHex
-	movement.Count = sendAmount
+	if movement.Username == fromHex.Owner {
+		newHex := fromHex
+		newHex.Count = 0
+		GameState[movement.From] = newHex
+		movement.Count = sendAmount
+		movement.Sender = fromHex.Owner
 
-	Moves = append(Moves, movement)
+		if len(Moves) == 0 {
+			Moves = make(map[uuid.UUID]HexMove)
+		}
+		Moves[uuid.New()] = movement
+	}
 }
 
 func getMovements(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Access-Control-Allow-Origin", "*")
 	json.NewEncoder(w).Encode(Moves)
+}
+
+func getBattles(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	json.NewEncoder(w).Encode(Battles)
 }

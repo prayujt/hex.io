@@ -12,50 +12,49 @@ Russian blue pattern:
 /* } */
 
 svg g:hover {
-  fill: #7be3f6;
+    fill: #7be3f6;
 }
 
 .click {
-  fill: #7be3f6;
+    fill: #7be3f6;
 }
 
 svg g polygon {
-  stroke: #7be3f6;
-  stroke-width: 0.2;
-  transition: fill-opacity .5s;
+    stroke: #7be3f6;
+    stroke-width: 0.2;
+    transition: fill-opacity 0.5s;
 }
 svg g text {
-  font-size: 0.22em;
-  fill: black;
-  fill-opacity: 0.7;
-  transition: fill-opacity .5s;
+    font-size: 0.22em;
+    fill: black;
+    fill-opacity: 0.7;
+    transition: fill-opacity 0.5s;
 }
 svg path {
-  fill: none;
-  stroke: #7be3f6;
-  stroke-width: 0.2em;
-  stroke-opacity: 0.7;
-  stroke-linecap: round;
-  stroke-linejoin: round;
+    fill: none;
+    stroke: #7be3f6;
+    stroke-width: 0.2em;
+    stroke-opacity: 0.7;
+    stroke-linecap: round;
+    stroke-linejoin: round;
 }
 
 .green {
-  fill: #00FF00
+    fill: #00ff00;
 }
 
 .blue {
-  fill: #0000FF
+    fill: #0000ff;
 }
 
 .red {
-  fill: #FF0000
+    fill: #ff0000;
 }
 
 .yellow {
-  fill: #FFFF00
+    fill: #ffff00;
 }
 
 .white {
-  fill: #FAF9F6
+    fill: #faf9f6;
 }
-
