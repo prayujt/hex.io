@@ -6,7 +6,7 @@ import { fetchUsers, postUserReady } from '../../features/api';
 import Game from '../Game/Game';
 
 export default function Lobby({ uuid }) {
-    const [players, setPlayers] = useState(["Kaniel", "Prayuj", "Jason"])
+    const [players, setPlayers] = useState([]);
     const [isPlayerReady, setisPlayerReady] = useState(false)
 
     const getUsers = async () => {

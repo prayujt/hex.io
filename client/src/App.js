@@ -7,6 +7,8 @@ import Game from './components/Game/Game';
 import { postUser } from "./features/api"
 import { generateUUID } from './features/generateUUID';
 
+import "./App.css";
+
 const io = require('socket.io-client')
 
 const App = () => {
@@ -55,7 +57,7 @@ const App = () => {
     setSubmitStatus(true);
   };
 
-  if (isSubmitted) return gameStarted ? <Game/> : <Lobby uuid={uuid} />
+  if (isSubmitted) return gameStarted ? <Game className="game-container"/> : <Lobby uuid={uuid} />
   else return <Login uuid={uuid} handleOnChange={handleLoginFormChange} handleSubmit={handleLoginSubmit} />
 }
 

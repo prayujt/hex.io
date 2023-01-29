@@ -1,9 +1,11 @@
 package main
 
 import (
-	// "log"
+	// "log" "encoding/json"
+	"encoding/json"
 	"math"
 	"math/rand"
+	"net/http"
 	"time"
 )
 
@@ -16,6 +18,18 @@ const MIN_SCALE int = 5
 const MAX_SCALE int = 20
 
 const NUM_HEXAGONS int = 91
+
+var Moves []HexMove
+
+type HexMove struct {
+	From  int
+	To    int
+	Count float64
+	Time  int
+}
+
+var UpdatesPerSecond float64 = 0.0
+var Frequency float64
 
 func initializeGame() {
 	rand.Seed(time.Now().UnixNano())
@@ -41,34 +55,71 @@ func initializeGame() {
 			increment_counter += 1
 		}
 
-		production_value := ProductionValues[rand.Intn(len(ProductionValues)-1)]
+		productionValue := float64(ProductionValues[rand.Intn(len(ProductionValues)-1)])
+		if productionValue > UpdatesPerSecond {
+			UpdatesPerSecond = productionValue
+		}
 		GameState = append(GameState, Hexagon{
 			HexId:       i,
 			TileState:   "neutral",
 			Owner:       owner,
 			Count:       0,
-			Production:  production_value,
-			MaxCapacity: production_value * (rand.Intn(MAX_SCALE-MIN_SCALE) + MIN_SCALE),
+			Production:  productionValue,
+			MaxCapacity: productionValue * float64(rand.Intn(MAX_SCALE-MIN_SCALE)+MIN_SCALE),
 			AttackCount: 0,
 			Color:       PlayerColors[owner],
 		})
 	}
 
+	Frequency = 1000 / float64(UpdatesPerSecond)
+
 	server.BroadcastToNamespace("", "gameStarted", GameState)
 
 	go func() {
-		time.Sleep(time.Second * 3)
+		time.Sleep(time.Second * 2)
 		for {
 			gameUpdate()
-			time.Sleep(time.Millisecond * 1000)
+			time.Sleep(time.Millisecond * time.Duration(Frequency))
 		}
 	}()
 
 	go func() {
-		time.Sleep(time.Second * 3)
+		time.Sleep(time.Second * 2)
 		for {
 			barUpdate()
-			time.Sleep(time.Millisecond * 1000)
+			time.Sleep(time.Millisecond * time.Duration(Frequency))
 		}
 	}()
+
+	go func() {
+		time.Sleep(time.Second * 2)
+		for {
+			trackMovements()
+			time.Sleep(time.Second)
+		}
+	}()
+}
+
+func move(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+
+	var movement HexMove
+	err := json.NewDecoder(r.Body).Decode(&movement)
+	if err != nil {
+		panic(err)
+	}
+	fromHex := GameState[movement.From]
+	sendAmount := fromHex.Count
+
+	newHex := fromHex
+	newHex.Count = 0
+	GameState[movement.From] = newHex
+	movement.Count = sendAmount
+
+	Moves = append(Moves, movement)
+}
+
+func getMovements(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	json.NewEncoder(w).Encode(Moves)
 }

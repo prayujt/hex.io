@@ -22,8 +22,9 @@ export const postUserReady = (playerReadyStatus) => {
          
 }
 
-
-
-
-
-
+export const postMove = (movement) => {
+    fetch('http://' + process.env.REACT_APP_API_URL + '/move', {
+        method: "POST",
+        body: JSON.stringify(movement)
+    })
+}
