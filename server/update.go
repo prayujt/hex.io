@@ -8,6 +8,7 @@ type Hexagon struct {
 	Production  int
 	MaxCapacity int
 	AttackCount int
+	Color       string
 }
 
 type Balance struct {
